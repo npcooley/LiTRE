@@ -85,10 +85,10 @@ for vals01 in ${files02[@]}; do
     # echo "${linevals}"
     
     if [[ "$fileext" == "dag" ]]; then
-       echo "bbb"
+       # echo "bbb"
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} ${replacement}/" ${vals01}
     elif [[ "$fileext" == "R" ]]; then
-       echo "ccc"
+       # echo "ccc"
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} <- ${replacement}/" ${vals01}
     else
        echo "file extension is not recognized"
