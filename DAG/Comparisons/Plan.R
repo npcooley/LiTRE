@@ -7,7 +7,7 @@ PlannedJobs <- readLines("PlannedJobs.txt")
 JobMap <- read.table("JobMap.txt")
 CompletedJobs <- readLines("CompletedJobs.txt")
 # this line can be edited with the 'var_change.sh' script in the misc_scripts directory
-LIM <- 50000
+LIM <- 500000
 
 CHRONOS <- c("ENV GET PYTHONPATH",
              "",

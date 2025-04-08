@@ -44,10 +44,6 @@ PARENT C CHILD D
 RETRY B 10
 RETRY D 250
 
-# Test conditions
-# RETRY B 3
-# RETRY D 3
-
 SCRIPT PRE A InitialPrep.sh
 # this script is currently not in use
 # SCRIPT PRE B CollectionStartCondition.sh

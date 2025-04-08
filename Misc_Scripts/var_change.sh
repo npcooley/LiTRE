@@ -86,16 +86,16 @@ for vals01 in ${files02[@]}; do
     
     if [[ "$fileext" == "dag" ]]; then
        echo "bbb"
-       sed -i "${lineval}s/${vals02}.*/${vals02} ${replacement}/" ${vals01}
+       sed -i '' -e "${lineval}s/${vals02}.*/${vals02} ${replacement}/" ${vals01}
     elif [[ "$fileext" == "R" ]]; then
        echo "ccc"
-       sed -i "${lineval}s/${vals02}.*/${vals02} <- ${replacement}/" ${vals01}
+       sed -i '' -e "${lineval}s/${vals02}.*/${vals02} <- ${replacement}/" ${vals01}
     else
        echo "file extension is not recognized"
        exit 1
     fi
     
-    echo "$vals02 to be appended with by $replacement on line $lineval"
+    echo "$vals02 to be appended with by $replacement on line $lineval in $vals01"
     # echo "$vals02"
   done
   # echo "$vals01"

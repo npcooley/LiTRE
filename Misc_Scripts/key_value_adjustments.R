@@ -8,7 +8,7 @@ suppressMessages(library(jsonlite))
 test_vals <- list("Manager.dag" = list("RETRY B" = 3,
                                        "RETRY D" = 3),
                   "DataCollection/Plan.R" = list("LIM" = 10L),
-                  "ComparisonsPlan.R" = list("LIM" = 50))
+                  "Comparisons/Plan.R" = list("LIM" = 50))
 
 writeLines(prettify(toJSON(test_vals)),
            "DAG/testvals.json")
