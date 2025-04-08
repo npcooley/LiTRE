@@ -1,0 +1,58 @@
+# Overall manager!
+
+# single job that goes out and asks for all complete refseq reps ftp locations
+# the initial pre-script creates the iteration tracker and run date file,
+# and the expected LogFile directories
+# it also asks whether the FTP key exists ... if it does not, it creates it
+
+# TEST CONDITIONS
+# This script -- Manager.dag -- has two retry statements
+# the first, for B, manages the initial data collection, if not all assemblies that
+# are expected returned, it repeats node B with missing assemblies, until either that retry count
+# is reached, or all expected assemblies are successfully returned
+# the second, for D, manages the all-vs-all comparison, single flights of ~ 50000 are released at at time
+# and behaves in a similar way
+# both retry statements have testing values that ARE NOT COMMENTED OUT IN THE EXPOSED VERSION OF THIS SCRIPT
+
+# further testing limits are set as a value 'LIM' in:
+# SetTargetAssemblies.R -- limit the initial target assemblies to evaluate workflow behavior
+# PlanCollection.R -- limit assembly collection flight size to evaluate retry behavior in data collection
+# Plan.R -- limit comparison flight size to evaluate retry behavior on comparisons
+# IN THE EXPOSED VERSION OF THIS WORKFLOW ALL OF THE TESTING LIMITS ARE ACTIVE
+# TO REPLICATE THIS SCRIPT YOU MUST MANUALLY COMMENT THEM OUT OR **REPLACE THEM** WITH YOUR OWN LIMITS
+
+JOB A SetTargetAssemblies.sub
+
+# pseudo-recursive step, attempt to grab all assemblies
+SUBDAG EXTERNAL B CollectAssemblies.dag
+
+JOB C SetTotalJobs.sub
+
+# run 50000 comparisons at a time
+# the Comparisons DAG can send it's result files away 
+SUBDAG EXTERNAL D Comparisons.dag
+
+# nothing fancy
+PARENT A CHILD B
+PARENT B CHILD C
+PARENT C CHILD D
+
+# attempt collection a few times
+# as of the writing the initial iteration this script (20240124) there are 4376 complete refseq reps that are returned by the initial entrez query
+# implying a total of ~ 9.6M pairwise comparisons requiring at least 192 iterations of 50K
+# build in extra iterations as a cushion
+RETRY B 10
+RETRY D 250
+
+# Test conditions
+# RETRY B 3
+# RETRY D 3
+
+SCRIPT PRE A InitialPrep.sh
+# this script is currently not in use
+# SCRIPT PRE B CollectionStartCondition.sh
+# Collection end condition might need to be checked in the subdag?
+SCRIPT POST B CollectionEndCondition.sh
+SCRIPT POST D ComparisonEndCondition.sh
+
+

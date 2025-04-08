@@ -1,0 +1,12 @@
+---
+title: "README"
+author: "Nicholas Cooley"
+date: "`r Sys.Date()`"
+output:
+  github_document: default
+---
+
+# A living tree of refseq equivalogs
+
+initial commit
+

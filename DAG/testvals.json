@@ -1,0 +1,21 @@
+{
+    "Manager.dag": {
+        "RETRY B": [
+            3
+        ],
+        "RETRY D": [
+            3
+        ]
+    },
+    "DataCollection/Plan.R": {
+        "LIM": [
+            10
+        ]
+    },
+    "ComparisonsPlan.R": {
+        "LIM": [
+            50
+        ]
+    }
+}
+
