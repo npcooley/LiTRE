@@ -1,36 +1,32 @@
 # Overall manager!
 
-# single job that goes out and asks for all complete refseq reps ftp locations
-# the initial pre-script creates the iteration tracker and run date file,
-# and the expected LogFile directories
-# it also asks whether the FTP key exists ... if it does not, it creates it
+# single job that goes out and asks for all complete refseq reference ftp locations
+# an initial pre-script runs a lot of overhead, checks for already existing maps and files
+# each node within this dag has a folder that contains all of that nodes submit files, dag files, wrapper scripts, and run scripts
+# as of this iteration the DAG contains two types of nodes, large planning and outlining single submit file jobs,
+# and external subdags that 
 
 # TEST CONDITIONS
-# This script -- Manager.dag -- has two retry statements
-# the first, for B, manages the initial data collection, if not all assemblies that
-# are expected returned, it repeats node B with missing assemblies, until either that retry count
-# is reached, or all expected assemblies are successfully returned
-# the second, for D, manages the all-vs-all comparison, single flights of ~ 50000 are released at at time
-# and behaves in a similar way
-# both retry statements have testing values that ARE NOT COMMENTED OUT IN THE EXPOSED VERSION OF THIS SCRIPT
+# a script and appropriately structured json files can be used to adjust testing and functional limits
 
-# further testing limits are set as a value 'LIM' in:
-# SetTargetAssemblies.R -- limit the initial target assemblies to evaluate workflow behavior
-# PlanCollection.R -- limit assembly collection flight size to evaluate retry behavior in data collection
-# Plan.R -- limit comparison flight size to evaluate retry behavior on comparisons
-# IN THE EXPOSED VERSION OF THIS WORKFLOW ALL OF THE TESTING LIMITS ARE ACTIVE
-# TO REPLICATE THIS SCRIPT YOU MUST MANUALLY COMMENT THEM OUT OR **REPLACE THEM** WITH YOUR OWN LIMITS
+# A == OutlineCollection
+# JOB A SetTargetAssemblies.sub
+JOB A OutlineCollection/Plan.sub
 
-JOB A SetTargetAssemblies.sub
-
+# B == RunCollection
 # pseudo-recursive step, attempt to grab all assemblies
-SUBDAG EXTERNAL B CollectAssemblies.dag
+# SUBDAG EXTERNAL B CollectAssemblies.dag
+SUBDAG EXTERNAL B RunCollection/Run.dag
 
-JOB C SetTotalJobs.sub
+# C == OutlineComparisons
+# JOB C SetTotalJobs.sub
+JOB C OutlineComparisons/Run.sub
 
 # run 50000 comparisons at a time
 # the Comparisons DAG can send it's result files away 
-SUBDAG EXTERNAL D Comparisons.dag
+# D == RunComparisons
+# SUBDAG EXTERNAL D Comparisons.dag
+SUBDAG EXTERNAL D RunComparisons/Run.dag
 
 # nothing fancy
 PARENT A CHILD B

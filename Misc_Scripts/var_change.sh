@@ -82,13 +82,11 @@ for vals01 in ${files02[@]}; do
     lineval=$(grep -n -m 1 "$vals02" "$vals01" | cut -d: -f1)
     # in .dag files variables will only appear once
     # in .R files variables will appear several times, the first should be their initial assignment
-    # echo "${linevals}"
     
     if [[ "$fileext" == "dag" ]]; then
-       # echo "bbb"
+    # giving the -i '' and -e flags explicitly seems to matter here?
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} ${replacement}/" ${vals01}
     elif [[ "$fileext" == "R" ]]; then
-       # echo "ccc"
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} <- ${replacement}/" ${vals01}
     else
        echo "file extension is not recognized"
