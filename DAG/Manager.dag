@@ -11,22 +11,22 @@
 
 # A == OutlineCollection
 # JOB A SetTargetAssemblies.sub
-JOB A OutlineCollection/Plan.sub
+JOB A NodeA/Run.sub
 
 # B == RunCollection
 # pseudo-recursive step, attempt to grab all assemblies
 # SUBDAG EXTERNAL B CollectAssemblies.dag
-SUBDAG EXTERNAL B RunCollection/Run.dag
+SUBDAG EXTERNAL B NodeB/Run.dag
 
 # C == OutlineComparisons
 # JOB C SetTotalJobs.sub
-JOB C OutlineComparisons/Run.sub
+JOB C NodeC/Run.sub
 
 # run 50000 comparisons at a time
 # the Comparisons DAG can send it's result files away 
 # D == RunComparisons
 # SUBDAG EXTERNAL D Comparisons.dag
-SUBDAG EXTERNAL D RunComparisons/Run.dag
+SUBDAG EXTERNAL D NodeD/Run.dag
 
 # nothing fancy
 PARENT A CHILD B
@@ -40,11 +40,16 @@ PARENT C CHILD D
 RETRY B 10
 RETRY D 250
 
-SCRIPT PRE A InitialPrep.sh
+# when the DAG is triggered we have some housekeeping to do
+SCRIPT PRE A ManagerStart.sh
+
+# When the first node is complete, mode the DAG it generates to the correct place
+SCRIPT POST A NodeAPost.sh
+
 # this script is currently not in use
 # SCRIPT PRE B CollectionStartCondition.sh
 # Collection end condition might need to be checked in the subdag?
 SCRIPT POST B CollectionEndCondition.sh
 SCRIPT POST D ComparisonEndCondition.sh
-
+SCRIPT POST D ManagerEnd.sh
 

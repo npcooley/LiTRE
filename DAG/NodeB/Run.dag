@@ -1,0 +1,13 @@
+# Collect Assemblies recursively
+
+# plan and build Collection.dag
+JOB BA PlanCollection.sub
+
+# collect assembles set by the LIM argument PlanCollection.R and the RETRY statement in InitialManager.dag
+SUBDAG EXTERNAL BB Collection.dag
+
+PARENT BA CHILD BB
+
+# this script checks whether all assemblies were grabbed successfully, and then asks for a restart
+# if they weren't
+SCRIPT POST BB CollectionEndCondition.sh
