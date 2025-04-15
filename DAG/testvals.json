@@ -7,12 +7,12 @@
             3
         ]
     },
-    "DataCollection/Plan.R": {
+    "NodeB/Plan.R": {
         "LIM": [
             10
         ]
     },
-    "Comparisons/Plan.R": {
+    "NodeD/Plan.R": {
         "LIM": [
             50
         ]

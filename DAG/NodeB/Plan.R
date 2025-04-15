@@ -8,7 +8,7 @@ AssembliesExpected <- readLines("AssembliesExpected.txt")
 AssemblyPlanning <- read.table(file = "AssemblyPlanning.txt")
 
 # Run limits
-LIM <- 5000
+LIM <- 10
 # Testing limits
 # LIM <- 10L
 

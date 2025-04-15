@@ -40,8 +40,8 @@ PARENT C CHILD D
 # as of the writing the initial iteration this script (20240124) there are 4376 complete refseq reps that are returned by the initial entrez query
 # implying a total of ~ 9.6M pairwise comparisons requiring at least 192 iterations of 50K
 # build in extra iterations as a cushion
-RETRY B 10
-RETRY D 250
+RETRY B 3
+RETRY D 3
 
 # when the DAG is triggered we have some housekeeping to do
 SCRIPT PRE A ManagerStart.sh
