@@ -1,4 +1,7 @@
 ###### -- plan the current assembly collection batch --------------------------
+# build the collection DAG that will eventually run pseudo-cyclically
+# the collection dag is the external subdag that is built on the fly
+
 
 AssembliesCompleted <- readLines("AssembliesCompleted.txt")
 AssembliesExpected <- readLines("AssembliesExpected.txt")

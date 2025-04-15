@@ -1,7 +1,7 @@
 # Overall manager!
 
 # single job that goes out and asks for all complete refseq reference ftp locations
-# an initial pre-script runs a lot of overhead, checks for already existing maps and files
+# an initial pre-script runs some overhead, checks for already existing maps and files
 # each node within this dag has a folder that contains all of that nodes submit files, dag files, wrapper scripts, and run scripts
 # as of this iteration the DAG contains two types of nodes, large planning and outlining single submit file jobs,
 # and external subdags that 
@@ -16,15 +16,18 @@ JOB A NodeA/Run.sub
 # B == RunCollection
 # pseudo-recursive step, attempt to grab all assemblies
 # SUBDAG EXTERNAL B CollectAssemblies.dag
-SUBDAG EXTERNAL B NodeB/Run.dag
+SUBDAG B NodeB/Run.dag
 
 # C == OutlineComparisons
+# for all assemblies, new and old, build a map of the relevant pairwise comparisons
+# the map name will be tied to the version number, so post initial these will probably be smaller
+# however it is the job of the D node to plan how to execute those comparisons
+# the total jobs are the within-new-set all-vs-all (n x n upper triangle) and the new set vs old set (n x m)
 # JOB C SetTotalJobs.sub
 JOB C NodeC/Run.sub
 
-# run 50000 comparisons at a time
-# the Comparisons DAG can send it's result files away 
-# D == RunComparisons
+# D == Comparisons, 50000 at a time
+# The Run.dag file controls everything that is triggered within this folder
 # SUBDAG EXTERNAL D Comparisons.dag
 SUBDAG EXTERNAL D NodeD/Run.dag
 

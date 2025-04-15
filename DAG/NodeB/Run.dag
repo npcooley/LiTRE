@@ -1,10 +1,10 @@
 # Collect Assemblies recursively
 
 # plan and build Collection.dag
-JOB BA PlanCollection.sub
+JOB BA NodeB/NodeBA/PlanCollection.sub
 
 # collect assembles set by the LIM argument PlanCollection.R and the RETRY statement in InitialManager.dag
-SUBDAG EXTERNAL BB Collection.dag
+SUBDAG EXTERNAL BB NodeB/NodeBB/Collection.dag
 
 PARENT BA CHILD BB
 
