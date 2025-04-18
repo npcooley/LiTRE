@@ -13,12 +13,12 @@ if [ -e "TrackerFiles/VersionStart.txt" ]; then
   iteration=$(echo $lineval | cut -d ':' -f1)
   # totalcount=$(echo $lineval | cut -d ':' -f5)
   ((iteration++))
-  val02=$(printf "$iteration:$val01\n")
+  val02=$(printf "%d:$val01\n" $iteration)
   echo "$val02" >> TrackerFiles/VersionStart.txt
 else
   # file file does not exist, create
   iteration=1
-  val02=$(printf "$iterartion:$val01\n")
+  val02=$(printf "%d:$val01\n" $iteration)
   echo "$val02" > TrackerFiles/VersionStart.txt
 fi
 

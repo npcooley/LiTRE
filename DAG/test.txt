@@ -1,0 +1,42 @@
+{
+    "Manager.dag": {
+        "RETRY B": [
+            10
+        ],
+        "RETRY D": [
+            250
+        ]
+    },
+    "NodeB/Plan.R": {
+        "LIM": [
+            5000
+        ]
+    },
+    "NodeD/Plan.R": {
+        "LIM": [
+            500000
+        ]
+    }
+}
+
+{
+    "Manager.dag": {
+        "RETRY B": [
+            3
+        ],
+        "RETRY D": [
+            3
+        ]
+    },
+    "NodeB/Plan.R": {
+        "LIM": [
+            10
+        ]
+    },
+    "NodeD/Plan.R": {
+        "LIM": [
+            50
+        ]
+    }
+}
+

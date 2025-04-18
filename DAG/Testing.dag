@@ -24,17 +24,17 @@ SUBDAG EXTERNAL B NodeB/Run.dag
 # however it is the job of the D node to plan how to execute those comparisons
 # the total jobs are the within-new-set all-vs-all (n x n upper triangle) and the new set vs old set (n x m)
 # JOB C SetTotalJobs.sub
-JOB C NodeC/Run.sub
+# JOB C NodeC/Run.sub
 
 # D == Comparisons, 50000 at a time
 # The Run.dag file controls everything that is triggered within this folder
 # SUBDAG EXTERNAL D Comparisons.dag
-SUBDAG EXTERNAL D NodeD/Run.dag
+# SUBDAG EXTERNAL D NodeD/Run.dag
 
 # nothing fancy
 PARENT A CHILD B
-PARENT B CHILD C
-PARENT C CHILD D
+# PARENT B CHILD C
+# PARENT C CHILD D
 
 # attempt collection a few times
 # as of the writing the initial iteration this script (20240124) there are 4376 complete refseq reps that are returned by the initial entrez query
@@ -46,13 +46,13 @@ RETRY D 3
 # when the DAG is triggered we have some housekeeping to do
 SCRIPT PRE A ManagerStart.sh
 
-# When the first node is complete, mode the DAG it generates to the correct place
+# When the first node is complete, move the DAG it generates to the correct place
 SCRIPT POST A NodeAPost.sh
 
 # this script is currently not in use
 # SCRIPT PRE B CollectionStartCondition.sh
 # Collection end condition might need to be checked in the subdag?
 SCRIPT POST B CollectionEndCondition.sh
-SCRIPT POST D ComparisonEndCondition.sh
-SCRIPT POST D ManagerEnd.sh
+# SCRIPT POST D ComparisonEndCondition.sh
+# SCRIPT POST D ManagerEnd.sh
 

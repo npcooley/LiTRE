@@ -1,0 +1,14 @@
+ENV GET PYTHONPATH
+
+SUBMIT-DESCRIPTION CHRONOS {
+  executable = ./Watcher/watch.py
+  arguments  = "$(Cluster) PLACEHOLDER"
+  output     = Watcher/job.out
+  error      = Watcher/job.err
+  log        = Watcher/time.log
+  universe   = local
+  getenv     = PYTHONPATH,CONDOR_CONFIG
+}
+
+SERVICE WATCHER CHRONOS
+

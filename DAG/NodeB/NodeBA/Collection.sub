@@ -1,0 +1,31 @@
+universe = vanilla
+executable = NodeB/NodeBA/Collection.sh
+log = NodeB/NodeBA/LogFiles/out.$(PersistentID).log
+output = NodeB/NodeBA/LogFiles/out.$(PersistentID).out
+error = NodeB/NodeBA/LogFiles/out.$(PersistentID).err
+
+# Kernel version comes from major.minor.patch in the format:
+# major * 10000 + minor * 1000 + patch
+# SynExtend comes from r-base which uses debian:latest, which
+# as of 20190722 is "buster" from 4.19.105
+# as per advice, 31000 will keep jobs away from RHEL 6
+
+requirements = Arch == "X86_64" && HAS_SINGULARITY == True && OSG_HOST_KERNEL_VERSION >= 31000
+request_cpus = 2
+request_memory = 6GB
+request_disk = 6GB
+
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:1.18.0"
+
+transfer_input_files = NodeB/NodeBA/Collection.R, \
+                        osdf:///ospool/ap20/data/npcooley/Training/$(PFAM)
+                        
+# no retry statements, retry is handled by DAG
+
+# these jobs should not take more than 5 hours, auto remove them if they're still running
+# periodic_remove = (JobStatus == 2) && ((CurrentTime - EnteredCurrentStatus) > (5 * 3600))
+
+
+arguments = $(Address) $(PersistentID) $(PFAM)
+
+queue

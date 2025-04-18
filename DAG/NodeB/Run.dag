@@ -1,13 +1,17 @@
 # Collect Assemblies recursively
+# This dag triggers a subdag dag that is built on the fly to identify assemblies to pull from the 
+# ncbi and prepare for the all-vs-all search
+# a pre script builds the subdag
+# and a post script checks the results
+# this entire DAG is exited with a status of 1, and re-tried under the appropriate conditions
+# the pre- and post- scripts manage the collection subdag's associated log and rescue files so that
+# they do not create any unexpected chaos
 
-# plan and build Collection.dag
-JOB BA NodeB/NodeBA/PlanCollection.sub
 
 # collect assembles set by the LIM argument PlanCollection.R and the RETRY statement in InitialManager.dag
-SUBDAG EXTERNAL BB NodeB/NodeBB/Collection.dag
+SUBDAG EXTERNAL BA NodeB/NodeBB/Collection.dag
 
-PARENT BA CHILD BB
-
-# this script checks whether all assemblies were grabbed successfully, and then asks for a restart
-# if they weren't
-SCRIPT POST BB CollectionEndCondition.sh
+# create the DAG file, perform some checks
+SCRIPT PRE BA NodeB/PreCollectionBA.sh
+# check the DAG's results, exit the current DAG with 1 if there are still more assemblies to collect
+SCRIPT POST BA NodeB/PostCollectionBA.sh

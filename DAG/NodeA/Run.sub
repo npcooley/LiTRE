@@ -18,7 +18,7 @@ request_disk = 4GB
 +SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:1.18.0"
 
 # IF using a docker container, only send the RScript and any associated data files
-transfer_input_files = Run.R, \
+transfer_input_files = NodeA/Run.R, \
                         FTP_Key.txt
                         
                         
