@@ -10,12 +10,10 @@
 # a script and appropriately structured json files can be used to adjust testing and functional limits
 
 # A == OutlineCollection
-# JOB A SetTargetAssemblies.sub
 JOB A NodeA/Run.sub
 
 # B == RunCollection
 # pseudo-recursive step, attempt to grab all assemblies
-# SUBDAG EXTERNAL B CollectAssemblies.dag
 SUBDAG EXTERNAL B NodeB/Run.dag
 
 # C == OutlineComparisons
@@ -33,26 +31,20 @@ SUBDAG EXTERNAL B NodeB/Run.dag
 
 # nothing fancy
 PARENT A CHILD B
-# PARENT B CHILD C
-# PARENT C CHILD D
 
 # attempt collection a few times
 # as of the writing the initial iteration this script (20240124) there are 4376 complete refseq reps that are returned by the initial entrez query
 # implying a total of ~ 9.6M pairwise comparisons requiring at least 192 iterations of 50K
 # build in extra iterations as a cushion
 RETRY B 3
-RETRY D 3
 
 # when the DAG is triggered we have some housekeeping to do
 SCRIPT PRE A ManagerStart.sh
 
-# When the first node is complete, move the DAG it generates to the correct place
-SCRIPT POST A NodeAPost.sh
+# When the first node completes, update the logfile
+SCRIPT POST A PostALogUpdate.sh
 
-# this script is currently not in use
-# SCRIPT PRE B CollectionStartCondition.sh
-# Collection end condition might need to be checked in the subdag?
-SCRIPT POST B CollectionEndCondition.sh
-# SCRIPT POST D ComparisonEndCondition.sh
-# SCRIPT POST D ManagerEnd.sh
+# When the DAG completes its last node, edit a tracking / logging file
+# SCRIPT POST B ManagerEnd.sh
+SCRIPT POST B CollectionRetry.sh
 

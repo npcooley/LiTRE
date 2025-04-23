@@ -8,6 +8,7 @@ Target <- "Prokaryotes"
 # we expect the directory of pressed models to be named the same as tar ball
 # we set this because we need to append it to lines
 PFAM <- "PFAM.tar.gz"
+version_tracking <- readLines("VersionStart.txt")
 
 ###### -- code body -----------------------------------------------------------
 
@@ -40,6 +41,19 @@ FTPs <- FTPs[sample(x = length(FTPs),
                     size = LIM,
                     replace = TRUE)]
 
+# set file names after current version
+# assemblies completed
+# assemblies expected
+# assemblies planned
+PrePend <- strsplit(x = version_tracking,
+                    split = " ",
+                    fixed = TRUE)
+# the first element in the last row is the current version number
+PrePend <- PrePend[[length(PrePend)]][1]
+PrePend <- paste0("v",
+                 PrePend,
+                 "_assemblies_")
+
 Key <- readLines("FTP_Key.txt")
 if (length(Key) == 0) {
   # Key is empty, data set is being generated for the first time
@@ -50,7 +64,8 @@ if (length(Key) == 0) {
                           times = length(FTPs)))
   
   write.table(x = m,
-              file = "AssemblyPlanning.txt",
+              file = paste0(PrePend,
+                            "planned.txt"),
               quote = FALSE,
               append = FALSE,
               row.names = FALSE,
@@ -69,10 +84,11 @@ if (length(Key) == 0) {
                                        format = "d"),
                                ".RData")
   writeLines(text = AssembliesExpected,
-             con = "AssembliesExpected.txt")
+             con = paste0(PrePend,
+                          "expected.txt"))
 } else {
   # Key is not empty, data set is being regenerated
-  Key <- read.table(Key)
+  Key <- read.table("FTP_Key.txt")
   NewFTPs <- FTPs[!(FTPs %in% Key[, 1L])]
   
   m <- cbind("Adds" = NewFTPs,
@@ -83,7 +99,8 @@ if (length(Key) == 0) {
                           times = length(NewFTPs)))
   
   write.table(x = m,
-              file = "AssemblyPlanning.txt",
+              file = paste0(PrePend,
+                            "planned.txt"),
               quote = FALSE,
               append = FALSE,
               row.names = FALSE,
@@ -98,7 +115,8 @@ if (length(Key) == 0) {
                                        format = "d"),
                                ".RData")
   writeLines(text = AssembliesExpected,
-             con = "AssembliesExpected.txt")
+             con = paste0(PrePend,
+                          "expected.txt"))
   
   Key <- rbind(Key,
                m)
@@ -114,7 +132,8 @@ if (length(Key) == 0) {
 AssembliesCompleted <- vector(mode = "character",
                               length = 0L)
 writeLines(text = AssembliesCompleted,
-           con = "AssembliesCompleted.txt")
+           con = paste0(PrePend,
+                        "completed.txt"))
 
 TIMEEND <- Sys.time()
 print(TIMEEND - TIMESTART)

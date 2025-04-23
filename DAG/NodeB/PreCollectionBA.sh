@@ -4,14 +4,18 @@ DateVal=$(date)
 # 3600 seconds in an hour: 7200 == 2hr, 14400 == 4hr, etc
 WatcherCount=14400
 DAG="Collection.dag"
+LIM=10
+other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
+other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)
 # replace the JOB node that creates the subdag with a bash script so i don't lose my mind
 # relies on three files
 # AssembliesExpected.txt is a simple txt file with a single assembly file name per line
-File01="AssembliesCompleted.txt"
+File01="v${other_vals01}_assemblies_completed.txt"
 # AssembliesComplete.txt is the same though is only populated by assemblies already collected
-File02="AssembliesExpected.txt"
+File02="v${other_vals01}_assemblies_expected.txt"
 # AssemplyPlanning.txt is a table of the expected VAR arguments for the dag
-File03="AssemblyPlanning.txt"
+File03="v${other_vals01}_assemblies_planned.txt"
+# File04=$(mktemp)
 
 # AssembliesExpected and AssemblyPlanning need to be the same length
 
@@ -19,7 +23,7 @@ File03="AssemblyPlanning.txt"
 shopt -s nullglob
 for file in Assembly*.RData; do
   [[ -f $file && -s $file ]] && printf '%s\n' "$file"
-done > AssembliesCompleted.txt
+done > ${File01}
 
 # use back substitution and wrap in parens so that the file name isn't printed
 Completed=$(wc -l < "${File01}")
@@ -55,22 +59,44 @@ else
   printf "\n" >> "${DAG}"
   # edit the watcher's time limit based on a variable coded into the script
   sed -i "s/PLACEHOLDER/${WatcherCount}/g" "${DAG}"
-  # now we just loop through ExpectedAssemblies, and if the value isn't present
-  # in completed assemblies, we add the associated lines
-  CurrentIterator=1
+  # we create a tempfile that has all the expected assemblies still to be produced
+  # grep -vxf "${File01}" "${File02}" > "${File04}"
+  IteratorA=1
+  IteratorB=1
   while IFS= read -r line; do
   # only write out lines that are needed
+  # if the the assembly is not already present in the completed txt file write it out to the DAG
+  # if the assembly is already present, skip it and do not count
     if ! grep -Fxq "$line" "$File01"; then
-      printf 'JOB B%d NodeB/NodeBA/Collection.sub\n' "${CurrentIterator}" >> "${DAG}"
-      printf 'VARS B%d Address="%s" PersistentID="%d" PFAM="%s"\n' ${CurrentIterator} ${PlanVal01[((${CurrentIterator} - 1))]} ${PlanVal02[(($CurrentIterator - 1))]} ${PlanVal03[((${CurrentIterator} - 1))]} >> "${DAG}"
+      printf 'JOB B%d NodeB/NodeBA/Collection.sub\n' "${IteratorA}" >> "${DAG}"
+      printf 'VARS B%d Address="%s" PersistentID="%d" PFAM="%s"\n' ${IteratorA} ${PlanVal01[((${IteratorB} - 1))]} ${PlanVal02[(($IteratorB - 1))]} ${PlanVal03[((${IteratorB} - 1))]} >> "${DAG}"
+      # a and b iterator on the addition
+      ((IteratorA++))
+      ((IteratorB++))
+    else
+      # only b iterates when we skip
+      # ((IteratorA++))
+      ((IteratorB++))
     fi
-    ((CurrentIterator++))
+    if [ $IteratorA -gt $LIM ]; then
+      break
+    fi
   done < "${File02}"
-  
+  # rm "${File04}"
   # append the service's other line
   printf "\nABORT-DAG-ON WATCHER 2 RETURN 1\n" >> "${DAG}"
   mv "${DAG}" NodeB/NodeBA/"${DAG}"
-  
 fi
 
-
+if [ -e "TrackerFiles/BStart.txt" ]; then
+  lineval=$(tail -n 1 "TrackerFiles/BStart.txt")
+  iteration=$(echo $lineval | cut -d " " -f1)
+  # totalcount=$(echo $lineval | cut -d ':' -f5)
+  ((iteration++))
+  val02=$(printf "%d ${val01}\n" $iteration)
+  echo "$val02" >> TrackerFiles/BStart.txt
+else
+  iteration=1
+  val02=$(printf "%d ${val01}\n" $iteration)
+  echo "$val02" > TrackerFiles/BStart.txt
+fi

@@ -10,15 +10,15 @@ val01="$(date)"
 if [ -e "TrackerFiles/VersionStart.txt" ]; then
   # file exists, append
   lineval=$(tail -n 1 "TrackerFiles/VersionStart.txt")
-  iteration=$(echo $lineval | cut -d ':' -f1)
+  iteration=$(echo $lineval | cut -d " " -f1)
   # totalcount=$(echo $lineval | cut -d ':' -f5)
   ((iteration++))
-  val02=$(printf "%d:$val01\n" $iteration)
+  val02=$(printf "%d $val01\n" $iteration)
   echo "$val02" >> TrackerFiles/VersionStart.txt
 else
   # file file does not exist, create
   iteration=1
-  val02=$(printf "%d:$val01\n" $iteration)
+  val02=$(printf "%d $val01\n" $iteration)
   echo "$val02" > TrackerFiles/VersionStart.txt
 fi
 
@@ -27,6 +27,7 @@ if [ ! -e "FTP_Key.txt" ] ; then
   touch "FTP_Key.txt"
 fi
 
+printf "[[${val01}]]: %d start\n" ${iteration} > SummaryFiles/log.txt
 
 # just have a log files directory for each node
 # LOGFILES=$(LogfilesAA LogFilesAB)

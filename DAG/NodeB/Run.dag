@@ -9,7 +9,7 @@
 
 
 # collect assembles set by the LIM argument PlanCollection.R and the RETRY statement in InitialManager.dag
-SUBDAG EXTERNAL BA NodeB/NodeBB/Collection.dag
+SUBDAG EXTERNAL BA NodeB/NodeBA/Collection.dag
 
 # create the DAG file, perform some checks
 SCRIPT PRE BA NodeB/PreCollectionBA.sh

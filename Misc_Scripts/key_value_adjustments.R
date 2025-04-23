@@ -7,7 +7,8 @@ suppressMessages(library(jsonlite))
 
 test_vals <- list("Manager.dag" = list("RETRY B" = 3,
                                        "RETRY D" = 3),
-                  "NodeB/Plan.R" = list("LIM" = 10),
+                  "NodeB/PreCollectionBA.sh" = list("LIM" = 10),
+                  "CollectionRetry.sh" = list("RETRY" = 3),
                   "NodeD/Plan.R" = list("LIM" = 50))
 
 writeLines(prettify(toJSON(test_vals)),
@@ -15,7 +16,8 @@ writeLines(prettify(toJSON(test_vals)),
 
 prod_vals <- list("Manager.dag" = list("RETRY B" = 10,
                                        "RETRY D" = 250),
-                  "NodeB/Plan.R" = list("LIM" = 5000),
+                  "NodeB/PreCollectionBA.sh" = list("LIM" = 10000),
+                  "CollectionRetry.sh" = list("RETRY" = 10),
                   "NodeD/Plan.R" = list("LIM" = 500000))
 
 writeLines(prettify(toJSON(prod_vals)),

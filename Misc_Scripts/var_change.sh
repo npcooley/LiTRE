@@ -88,6 +88,8 @@ for vals01 in ${files02[@]}; do
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} ${replacement}/" ${vals01}
     elif [[ "$fileext" == "R" ]]; then
        sed -i '' -e "${lineval}s/${vals02}.*/${vals02} <- ${replacement}/" ${vals01}
+    elif [[ "$fileext" == "sh" ]]; then
+      sed -i '' -e "${lineval}s/${vals02}.*/${vals02}=${replacement}/" ${vals01}
     else
        echo "file extension is not recognized"
        exit 1

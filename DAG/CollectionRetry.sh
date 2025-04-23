@@ -2,8 +2,11 @@
 
 DateVal=$(date)
 
+shopt -s nullglob
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
 other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)
+other_vals02=$(tail -n 1 "TrackerFiles/BStart.txt")
+RETRY=3
 # post collection DAG
 # nuke the associated DAG files and then ...
 # AssembliesExpected.txt is a simple txt file with a single assembly file name per line
@@ -13,40 +16,19 @@ File02="v${other_vals01}_assemblies_expected.txt"
 # AssemplyPlanning.txt is a table of the expected VAR arguments for the dag
 File03="v${other_vals01}_assemblies_planned.txt"
 
-# collect current completed jobs
-shopt -s nullglob
-for file in Assembly*.RData; do
-  [[ -f $file && -s $file ]] && printf '%s\n' "$file"
-done > "${File01}"
-
 # use redirection and wrap in parens so that the file name isn't printed
 Completed=$(wc -l < "${File01}")
 Expected=$(wc -l < "${File02}")
 
-for file in /NodeB/NodeBA/${DAG}; do
-  if [ -f $file ]; then
-    rm $file
-  fi
-done
-
-
-if [ -e "TrackerFiles/BEnd.txt" ]; then
-  lineval=$(tail -n 1 "TrackerFiles/BEnd.txt")
-  iteration=$(echo $lineval | cut -d " " -f1)
-  # totalcount=$(echo $lineval | cut -d ':' -f5)
-  ((iteration++))
-  val02=$(printf "%d $val01\n" $iteration)
-  echo "$val02" >> TrackerFiles/BEnd.txt
-else
-  iteration=1
-  val02=$(printf "%d $val01\n" $iteration)
-  echo "$val02" > TrackerFiles/BEnd.txt
-fi
-
 # this needs to happen at the top most level
-# if [ ${Completed} -eq ${Expected} ]; then
-#   exit 0
-# else
-#   exit 1
-# fi
-
+# the node inherits the exit condition of the post script, i think?
+if [ ${Completed} -eq ${Expected} ]; then
+  tar czvf assemblylists.tar.xz v*_assemblies_completed.txt
+  exit 0
+else
+  if [ ${RETRY} -eq ${other_vals02} ]; then
+    tar czvf assemblylists.tar.xz v*_assemblies_completed.txt
+    exit 0
+  fi
+  exit 1
+fi
