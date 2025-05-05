@@ -1,0 +1,17 @@
+# Run comparison flights recursively
+# This dag triggers a subdag dag that is built on the fly to run assembly vs assembly comparisons
+# a pre script builds the subdag
+# and a post script checks the results
+# this entire DAG is exited with a status of 1, and re-tried under the appropriate conditions
+# the pre- and post- scripts manage the flight subdag's associated log and rescue files so that
+# they do not create any unexpected chaos
+
+
+# collect assembles set by the LIM argument PlanCollection.R and the RETRY statement in InitialManager.dag
+SUBDAG EXTERNAL DA NodeD/NodeDA/Flight.dag
+
+# create the DAG file, perform some checks
+SCRIPT PRE DA NodeD/PreFlightDA.sh
+# check the Flight DAG results, do the appropriate accounting
+# exit gracefully, allow the post script for this DAG to manage retries
+SCRIPT POST DA NodeD/PostFlightDA.sh

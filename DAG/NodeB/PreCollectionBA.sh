@@ -1,9 +1,10 @@
 #! /bin/bash
 
-DateVal=$(date)
+dateval=$(date)
 # 3600 seconds in an hour: 7200 == 2hr, 14400 == 4hr, etc
 WatcherCount=14400
 DAG="Collection.dag"
+# plan at most $LIM collections
 LIM=10
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
 other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)
@@ -38,18 +39,18 @@ check01=${#PlanVal01[@]}
 
 # both this script, and the post-script need to check for the existence of 
 # log and rescue files from a previous iteration
-for file in /NodeB/NodeBA/${DAG}; do
+for file in NodeB/NodeBA/${DAG}*; do
   if [ -f $file ]; then
     rm $file
   fi
 done
 
 if [[ ! ${Expected} -eq ${check01} ]]; then
-  echo "${DateVal}::Planning file and expected reference file are not the same length..."
+  echo "${dateval}::Planning file and expected reference file are not the same length..."
   exit 1
-  # printf "${DateVal}::Planning file and expected reference file are not the same length...\n"
+  # printf "${dateval}::Planning file and expected reference file are not the same length...\n"
 else
-  echo "${DateVal}::Planning file and expected reference file appear to exist as expected..."
+  echo "${dateval}::Planning file and expected reference file appear to exist as expected..."
   # echo ${check01}
   # echo ${Expected}
   # if we have the files as expected, we need to start building the dag
@@ -67,9 +68,9 @@ else
   # only write out lines that are needed
   # if the the assembly is not already present in the completed txt file write it out to the DAG
   # if the assembly is already present, skip it and do not count
-    if ! grep -Fxq "$line" "$File01"; then
-      printf 'JOB B%d NodeB/NodeBA/Collection.sub\n' "${IteratorA}" >> "${DAG}"
-      printf 'VARS B%d Address="%s" PersistentID="%d" PFAM="%s"\n' ${IteratorA} ${PlanVal01[((${IteratorB} - 1))]} ${PlanVal02[(($IteratorB - 1))]} ${PlanVal03[((${IteratorB} - 1))]} >> "${DAG}"
+    if ! grep -Fxq "${line}" "${File01}"; then
+      printf 'JOB B%d NodeB/NodeBA/Collection.sub\n' ${IteratorA} >> ${DAG}
+      printf 'VARS B%d Address="%s" PersistentID="%d" PFAM="%s"\n' ${IteratorA} ${PlanVal01[((${IteratorB} - 1))]} ${PlanVal02[(($IteratorB - 1))]} ${PlanVal03[((${IteratorB} - 1))]} >> ${DAG}
       # a and b iterator on the addition
       ((IteratorA++))
       ((IteratorB++))
@@ -84,19 +85,20 @@ else
   done < "${File02}"
   # rm "${File04}"
   # append the service's other line
-  printf "\nABORT-DAG-ON WATCHER 2 RETURN 1\n" >> "${DAG}"
-  mv "${DAG}" NodeB/NodeBA/"${DAG}"
+  printf "\nABORT-DAG-ON WATCHER 2 RETURN 1\n" >> ${DAG}
+  mv ${DAG} NodeB/NodeBA/${DAG}
 fi
+
+IteratorC=$((IteratorA - 1))
+printf "    NodeBA DAG with %d jobs generated [${dateval}]\n" ${IteratorC} >> SummaryFiles/log.txt
 
 if [ -e "TrackerFiles/BStart.txt" ]; then
   lineval=$(tail -n 1 "TrackerFiles/BStart.txt")
   iteration=$(echo $lineval | cut -d " " -f1)
   # totalcount=$(echo $lineval | cut -d ':' -f5)
   ((iteration++))
-  val02=$(printf "%d ${val01}\n" $iteration)
-  echo "$val02" >> TrackerFiles/BStart.txt
+  printf "$iteration\n" >> TrackerFiles/BStart.txt
 else
   iteration=1
-  val02=$(printf "%d ${val01}\n" $iteration)
-  echo "$val02" > TrackerFiles/BStart.txt
+  printf "$iteration\n" > TrackerFiles/BStart.txt
 fi

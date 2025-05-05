@@ -4,7 +4,7 @@
 # either manually or through cron
 # it needs to do a few things
 
-val01="$(date)"
+val01=$(date)
 
 # if the version tracker file exists append the iteration
 if [ -e "TrackerFiles/VersionStart.txt" ]; then
@@ -27,7 +27,7 @@ if [ ! -e "FTP_Key.txt" ] ; then
   touch "FTP_Key.txt"
 fi
 
-printf "[[${val01}]]: %d start\n" ${iteration} > SummaryFiles/log.txt
+printf "[[${val01}]]: Manager.dag starting iteration %d\n" ${iteration} > SummaryFiles/log.txt
 
 # just have a log files directory for each node
 # LOGFILES=$(LogfilesAA LogFilesAB)

@@ -1,9 +1,12 @@
 #! /bin/bash
 
-DateVal=$(date)
+dateval=$(date)
 
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
 other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)
+
+LIM=3
+DAG="Collection.dag"
 # post collection DAG
 # nuke the associated DAG files and then ...
 # AssembliesExpected.txt is a simple txt file with a single assembly file name per line
@@ -20,10 +23,12 @@ for file in Assembly*.RData; do
 done > "${File01}"
 
 # use redirection and wrap in parens so that the file name isn't printed
-Completed=$(wc -l < "${File01}")
-Expected=$(wc -l < "${File02}")
+Completed=$(wc -l < ${File01})
+Expected=$(wc -l < ${File02})
 
-for file in /NodeB/NodeBA/${DAG}; do
+printf "    NodeBA DAG completed %d of %d jobs returning data [${dateval}]" ${Completed} ${Expected} >> SummaryFiles/log.txt
+
+for file in NodeB/NodeBA/${DAG}*; do
   if [ -f $file ]; then
     rm $file
   fi
@@ -35,12 +40,10 @@ if [ -e "TrackerFiles/BEnd.txt" ]; then
   iteration=$(echo $lineval | cut -d " " -f1)
   # totalcount=$(echo $lineval | cut -d ':' -f5)
   ((iteration++))
-  val02=$(printf "%d $val01\n" $iteration)
-  echo "$val02" >> TrackerFiles/BEnd.txt
+  printf "$iteration\n" >> TrackerFiles/BEnd.txt
 else
   iteration=1
-  val02=$(printf "%d $val01\n" $iteration)
-  echo "$val02" > TrackerFiles/BEnd.txt
+  printf "$iteration\n" > TrackerFiles/BEnd.txt
 fi
 
 # this needs to happen at the top most level

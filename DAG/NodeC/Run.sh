@@ -1,10 +1,4 @@
 #!/bin/bash
 
-Rscript SetTotalJobs.R
+Rscript Run.R
 
-if [ -e PlannedJobs.txt ]
-then
-  exit 0
-else
-  exit 1
-fi

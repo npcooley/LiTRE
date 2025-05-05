@@ -12,23 +12,14 @@ error = NodeC/LogFiles/out.$(Process).err
 
 requirements = Arch == "X86_64" && HAS_SINGULARITY == True && OSG_HOST_KERNEL_VERSION >= 31000
 request_cpus = 1
-request_memory = 4GB
-request_disk = 4GB
+request_memory = 8GB
+request_disk = 8GB
 
 +SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:1.18.0"
 
 transfer_input_files = NodeC/Run.R, \
-                        assemblylists.tar.xz
-
-# Send jobs to Held state on failure up to 4 times, a 5th attempt is allowed but afterwards it should
-# register as completed
-on_exit_hold = (ExitBySignal == True) || (ExitCode != 0) && \
-               (NumJobStarts < 5)
-
-# release a job that has been held, after it has been held for 10 minutes, up to a maximum of 5 retries
-periodic_release = (NumJobStarts < 10) && \
-                   (((HoldReasonCode == 12) && (HoldReasonSubCode == 0 )) || (HoldReasonCode == 3)) && \
-                   ((CurrentTime - EnteredCurrentStatus) > 600)
+                        assemblylists.tar.xz, \
+                        comparisonlists.tar.xz
 
 arguments = $(Process)
 

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-DateVal=$(date)
+dateval=$(date)
 
 shopt -s nullglob
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
@@ -19,6 +19,9 @@ File03="v${other_vals01}_assemblies_planned.txt"
 # use redirection and wrap in parens so that the file name isn't printed
 Completed=$(wc -l < "${File01}")
 Expected=$(wc -l < "${File02}")
+
+# print an update to the logfile before exiting
+printf "  NodeB completed %d of %d assemblies on attempt %d [${dateval}]\n" ${Completed} ${Expected} ${other_vals02} >> SummaryFiles/log.txt
 
 # this needs to happen at the top most level
 # the node inherits the exit condition of the post script, i think?

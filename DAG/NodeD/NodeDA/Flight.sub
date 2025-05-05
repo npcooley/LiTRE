@@ -1,0 +1,38 @@
+universe = vanilla
+executable = NodeD/NodeDA/Flight.sh
+log = NodeD/NodeDA/LogFiles/out.$(PersistentID).log
+output = NodeD/NodeDA/LogFiles/out.$(PersistentID).out
+error = NodeD/NodeDA/LogFiles/out.$(PersistentID).err
+
+# Kernel version comes from major.minor.patch in the format:
+# major * 10000 + minor * 1000 + patch
+# SynExtend comes from r-base which uses debian:latest, which
+# as of 20190722 is "buster" from 4.19.105
+# as per advice, 31000 will keep jobs away from RHEL 6
+
+requirements = Arch == "X86_64" && HAS_SINGULARITY == True && OSG_HOST_KERNEL_VERSION >= 31000
+request_cpus = 1
+request_memory = 4GB
+request_disk = 4GB
+
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:slim.1.21.0"
+
+# IF using a docker container, only send the RScript and any associated data files
+transfer_input_files = NodeD/NodeDA/Flight.R, \
+                        $(Partner1), \
+                        $(Partner2)
+
+# build some robustness to weird holds here
+# release a job that has been held, after it has been held for 10 minutes, up to a maximum of 5 retries
+periodic_release = (NumJobStarts < 5) && \
+                   ((CurrentTime - EnteredCurrentStatus) > 600)
+
+# remove a job if it starts more than twice
+# periodic_remove = (NumJobStarts >= 3)
+
+
+arguments = $(Partner1) $(Partner2) $(PersistentID)
+
+queue
+
+
