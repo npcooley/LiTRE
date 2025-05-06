@@ -6,7 +6,7 @@ shopt -s nullglob
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
 other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)
 other_vals02=$(tail -n 1 "TrackerFiles/BStart.txt")
-LIM=3
+LIM=10
 # post collection DAG
 # nuke the associated DAG files and then ...
 # AssembliesExpected.txt is a simple txt file with a single assembly file name per line

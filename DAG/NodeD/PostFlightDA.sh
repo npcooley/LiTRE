@@ -71,9 +71,9 @@ else
   rm ${File04}
   rm ${File05}
   rm ${res_target}.txt.gz
-  rm NodeD/NodeDA/out.*.err
-  rm NodeD/NodeDA/out.*.out
-  rm NodeD/NodeDA/out.*.log
+  rm NodeD/NodeDA/LogFiles/out.*.err
+  rm NodeD/NodeDA/LogFiles/out.*.out
+  rm NodeD/NodeDA/LogFiles/out.*.log
 
   # remove the just completed dag's log files and things
   for file in NodeD/NodeDA/${DAG}*; do

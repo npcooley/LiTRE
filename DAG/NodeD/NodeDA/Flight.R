@@ -59,6 +59,7 @@ if (nrow(Syn[[2, 1]]) > 0) {
                               CompeteBy = "Delta_Background",
                               PollContext = FALSE,
                               Verbose = TRUE)
+  P02 <- P02[P02$Approx_Global_Score >= 1e-5, ]
   P03 <- SummarizePairs(SynExtendObject = L01,
                         DataBase01 = Conn01,
                         SearchScheme = "standard",
@@ -67,6 +68,7 @@ if (nrow(Syn[[2, 1]]) > 0) {
   P04 <- WithinSetCompetition(SynExtendObject = P03,
                               AllowCrossContigConflicts = TRUE,
                               Verbose = TRUE)
+  P04 <- P04[P04$Approx_Global_Score >= 1e-5, ]
   i1 <- paste(P02$p1,
               P02$p2,
               sep = "_")
