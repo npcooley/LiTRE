@@ -13,11 +13,11 @@
         ]
     },
     "CollectionRetry.sh": {
-        "RETRY": [
+        "LIM": [
             3
         ]
     },
-    "NodeD/PreFlight.sh": {
+    "NodeD/PreFlightDA.sh": {
         "LIM": [
             100
         ]

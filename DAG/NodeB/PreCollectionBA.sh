@@ -4,7 +4,6 @@ dateval=$(date)
 # 3600 seconds in an hour: 7200 == 2hr, 14400 == 4hr, etc
 WatcherCount=14400
 DAG="Collection.dag"
-# plan at most $LIM collections
 LIM=10
 other_vals01=$(tail -n 1 "TrackerFiles/VersionStart.txt")
 other_vals01=$(echo "${other_vals01}" | cut -d " " -f1)

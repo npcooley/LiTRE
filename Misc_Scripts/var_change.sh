@@ -95,7 +95,7 @@ for vals01 in ${files02[@]}; do
        exit 1
     fi
     
-    echo "$vals02 to be appended with by $replacement on line $lineval in $vals01"
+    echo "$vals02 to be appended with $replacement on line $lineval in $vals01"
     # echo "$vals02"
   done
   # echo "$vals01"
