@@ -4,17 +4,27 @@
             10
         ],
         "RETRY D": [
-            250
+            300
         ]
     },
-    "NodeB/Plan.R": {
+    "NodeB/PreCollectionBA.sh": {
         "LIM": [
-            5000
+            10000
         ]
     },
-    "NodeD/Plan.R": {
+    "CollectionRetry.sh": {
+        "RETRY": [
+            10
+        ]
+    },
+    "NodeD/PreFlight.sh": {
         "LIM": [
-            500000
+            50000
+        ]
+    },
+    "ManagerEnd.sh": {
+        "LIM": [
+            300
         ]
     }
 }

@@ -26,7 +26,7 @@ done > "${File01}"
 Completed=$(wc -l < ${File01})
 Expected=$(wc -l < ${File02})
 
-printf "    NodeBA DAG completed %d of %d jobs returning data [${dateval}]" ${Completed} ${Expected} >> SummaryFiles/log.txt
+printf "    NodeBA DAG completed %d of %d jobs returning data [${dateval}]\n" ${Completed} ${Expected} >> SummaryFiles/log.txt
 
 for file in NodeB/NodeBA/${DAG}*; do
   if [ -f $file ]; then

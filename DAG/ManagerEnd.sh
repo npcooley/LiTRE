@@ -22,7 +22,7 @@ other_vals02=$(tail -n 1 "TrackerFiles/DStart.txt")
 other_vals02=$(echo $other_vals02 | cut -d " " -f1)
 other_vals03=$(wc -l < $File01)
 other_vals04=$(wc -l < $File02)
-LIM=250
+LIM=5
 DAG="Flight.dag"
 
 for file in NodeD/NodeDA/${DAG}*; do
@@ -49,7 +49,8 @@ if [ $other_vals02 -ge $LIM ] || [ $other_vals03 -eq $othervals_04 ]; then
     iteration=1
     printf "%d\n" ${iteration} > TrackerFiles/VersionComplete.txt
   fi
-  # add to the log file
+  # add to the log file and remove some of the trackerfiles
+  rm TrackerFiles/DStart
   printf "[[${dateval}]]: Manager.dag ending iteration %d\n" ${iteration} >> SummaryFiles/log.txt
   # exit with condition zero, the dag is completed
   exit 0

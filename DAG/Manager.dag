@@ -6,16 +6,14 @@
 # as of this iteration the DAG contains two types of nodes, large planning and outlining single submit file jobs,
 # and external subdags that 
 
-# TEST CONDITIONS
+# CONDITIONS
 # a script and appropriately structured json files can be used to adjust testing and functional limits
 
 # A == OutlineCollection
-# JOB A SetTargetAssemblies.sub
 JOB A NodeA/Run.sub
 
 # B == RunCollection
 # pseudo-recursive step, attempt to grab all assemblies
-# SUBDAG EXTERNAL B CollectAssemblies.dag
 SUBDAG EXTERNAL B NodeB/Run.dag
 
 # C == OutlineComparisons
@@ -23,12 +21,10 @@ SUBDAG EXTERNAL B NodeB/Run.dag
 # the map name will be tied to the version number, so post initial these will probably be smaller
 # however it is the job of the D node to plan how to execute those comparisons
 # the total jobs are the within-new-set all-vs-all (n x n upper triangle) and the new set vs old set (n x m)
-# JOB C SetTotalJobs.sub
 JOB C NodeC/Run.sub
 
 # D == Comparisons, 50000 at a time
 # The Run.dag file controls everything that is triggered within this folder
-# SUBDAG EXTERNAL D Comparisons.dag
 SUBDAG EXTERNAL D NodeD/Run.dag
 
 # nothing fancy
@@ -41,18 +37,25 @@ PARENT C CHILD D
 # implying a total of ~ 9.6M pairwise comparisons requiring at least 192 iterations of 50K
 # build in extra iterations as a cushion
 RETRY B 3
-RETRY D 3
+RETRY D 5
 
 # when the DAG is triggered we have some housekeeping to do
 SCRIPT PRE A ManagerStart.sh
 
-# When the first node is complete, mode the DAG it generates to the correct place
-SCRIPT POST A NodeAPost.sh
+# When node A completes, perform some housekeeping
+SCRIPT POST A PostALogUpdate.sh
 
-# this script is currently not in use
-# SCRIPT PRE B CollectionStartCondition.sh
-# Collection end condition might need to be checked in the subdag?
-SCRIPT POST B CollectionEndCondition.sh
-SCRIPT POST D ComparisonEndCondition.sh
+# When B completes do some housekeeping
+SCRIPT POST B CollectionRetry.sh
+
+# Prep the C JOB
+SCRIPT PRE C PreAllvAllC.sh
+
+# Perfrom some log updates when C completes
+SCRIPT POST C PostCLogUpdate.sh
+
+# When the D node reaches its conclusion, ask whether the node has completed its task successfully or not
+# if not, re-enter the retry loop
+# currently this does double duty as both ending the DAG, and ending the D node
 SCRIPT POST D ManagerEnd.sh
 
