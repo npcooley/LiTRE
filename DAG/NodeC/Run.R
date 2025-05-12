@@ -40,10 +40,12 @@ for (m1 in seq_along(current_res)) {
     mat <- matrix(data = NA_integer_,
                   ncol = 4L,
                   nrow = L2)
+    row_count <- 0L
     for (m2 in seq_len(L - 1L)) {
       for (m3 in (m2 + 1L):L) {
         count <- count + 1L
-        mat[count, ] <- c(m1, m2, m3, count)
+        row_count <- row_count + 1L
+        mat[row_count, ] <- c(m1, m2, m3, count)
       }
     }
   } else {
@@ -52,10 +54,12 @@ for (m1 in seq_along(current_res)) {
     mat <- matrix(data = NA_integer_,
                   ncol = 4L,
                   nrow = L2 * L)
+    row_count <- 0
     for (m2 in seq_len(L)) {
       for (m3 in seq_len(L2)) {
         count <- count + 1L
-        mat[count, ] <- c(m1, m2, m3, count)
+        row_count <- row_count + 1L
+        mat[row_count, ] <- c(m1, m2, m3, count)
       }
     }
   }
