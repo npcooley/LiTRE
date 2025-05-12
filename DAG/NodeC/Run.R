@@ -67,19 +67,21 @@ mat <- do.call(rbind,
 
 # ask if there were any previously planned jobs
 # use the sum as an offset for the jobs about to be planned
-priorjobs <- sum(vapply(X = files02,
-                        FUN = function(x) {
-                          y <- readLines(paste0(tmp02,
-                                                "/",
-                                                x))
-                          return(length(y))
-                        },
-                        FUN.VALUE = vector(mode = "integer",
-                                           length = 1L)))
+# this is unnecessary because these files are never stored by these identifiers
+# and should never collide
+# priorjobs <- sum(vapply(X = files02,
+#                         FUN = function(x) {
+#                           y <- readLines(paste0(tmp02,
+#                                                 "/",
+#                                                 x))
+#                           return(length(y))
+#                         },
+#                         FUN.VALUE = vector(mode = "integer",
+#                                            length = 1L)))
 
 # this can go up to 9.99 billion or whatever
 PlannedJobs <- paste0("Pairwise",
-                      formatC(x = seq_len(nrow(mat)) + priorjobs,
+                      formatC(x = seq_len(nrow(mat)), # + priorjobs,
                               width = 10,
                               flag = 0,
                               format = "d"),
