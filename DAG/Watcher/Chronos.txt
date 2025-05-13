@@ -1,8 +1,8 @@
 ENV GET PYTHONPATH
 
 SUBMIT-DESCRIPTION CHRONOS {
-  executable = ./Watcher/watch.py
-  arguments  = "$(Cluster) PLACEHOLDER"
+  executable = ./Watcher/simple_watch.sh
+  arguments  = "PLACEHOLDER"
   output     = Watcher/job.out
   error      = Watcher/job.err
   log        = Watcher/time.log
