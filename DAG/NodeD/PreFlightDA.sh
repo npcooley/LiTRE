@@ -171,7 +171,9 @@ rm ${tmp06}
 printf "\nABORT-DAG-ON WATCHER 2 RETURN 1\n" >> ${DAG}
 mv ${DAG} NodeD/NodeDA/${DAG}
 
-printf "    NodeDA DAG with %d jobs planned [${dateval}]\n" ${current_lines} >> SummaryFiles/log.txt
+submitted_lines=$(wc -l < ${tmp02})
+
+printf "    NodeDA DAG with %d jobs planned [${dateval}]\n" ${submitted_lines} >> SummaryFiles/log.txt
 
 if [ -e "TrackerFiles/DStart.txt" ]; then
   lineval=$(tail -n 1 "TrackerFiles/DStart.txt")
