@@ -160,12 +160,6 @@ for file in ${tmp04}_*; do
   fi
 done
 
-rm ${tmp01}
-rm ${tmp02}
-rm ${tmp03}
-rm ${tmp04}*
-rm ${tmp05}
-rm ${tmp06}
 
 # append the service's other line
 printf "\nABORT-DAG-ON WATCHER 2 RETURN 1\n" >> ${DAG}
@@ -174,6 +168,13 @@ mv ${DAG} NodeD/NodeDA/${DAG}
 submitted_lines=$(wc -l < ${tmp02})
 
 printf "    NodeDA DAG with %d jobs planned [${dateval}]\n" ${submitted_lines} >> SummaryFiles/log.txt
+
+rm ${tmp01}
+rm ${tmp02}
+rm ${tmp03}
+rm ${tmp04}*
+rm ${tmp05}
+rm ${tmp06}
 
 if [ -e "TrackerFiles/DStart.txt" ]; then
   lineval=$(tail -n 1 "TrackerFiles/DStart.txt")
