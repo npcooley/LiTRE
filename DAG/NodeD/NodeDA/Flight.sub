@@ -15,7 +15,7 @@ request_cpus = 1
 request_memory = 4GB
 request_disk = 4GB
 
-+SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:slim.1.21.0"
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/npcooley/synextend:slim.1.21.2"
 
 # IF using a docker container, only send the RScript and any associated data files
 transfer_input_files = NodeD/NodeDA/Flight.R, \

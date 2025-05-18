@@ -54,20 +54,26 @@ if (nrow(Syn[[2, 1]]) > 0) {
                         RejectBy = "direct",
                         Verbose = TRUE)
   # these should be the default args and correct
-  P02 <- WithinSetCompetition(SynExtendObject = P01,
-                              AllowCrossContigConflicts = TRUE,
-                              CompeteBy = "Delta_Background",
-                              PollContext = FALSE,
-                              Verbose = TRUE)
+  if (nrow(P01) > 0) {
+    P02 <- WithinSetCompetition(SynExtendObject = P01,
+                                AllowCrossContigConflicts = TRUE,
+                                Verbose = TRUE)
+  } else {
+    P02 <- P01
+  }
   P02 <- P02[P02$Approx_Global_Score >= 1e-5, ]
   P03 <- SummarizePairs(SynExtendObject = L01,
                         DataBase01 = Conn01,
                         SearchScheme = "standard",
                         RejectBy = "kmeans",
                         Verbose = TRUE)
-  P04 <- WithinSetCompetition(SynExtendObject = P03,
-                              AllowCrossContigConflicts = TRUE,
-                              Verbose = TRUE)
+  if (nrow(P03) > 0) {
+    P04 <- WithinSetCompetition(SynExtendObject = P03,
+                                AllowCrossContigConflicts = TRUE,
+                                Verbose = TRUE)
+  } else {
+    P04 <- P03
+  }
   P04 <- P04[P04$Approx_Global_Score >= 1e-5, ]
   i1 <- paste(P02$p1,
               P02$p2,
