@@ -1,0 +1,8 @@
+cat 1
+dog 2
+ferret 3
+weasel 4
+fox 5
+parrot 6
+finch 8
+wolf 9

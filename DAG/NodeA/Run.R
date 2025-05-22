@@ -119,7 +119,7 @@ if (length(Key) == 0) {
                           "expected.txt"))
   
   Key <- rbind(Key,
-               m)
+               m[, c(1, 2)])
   
   write.table(x = Key[, c(1, 2)],
               file = "FTP_Key.txt",

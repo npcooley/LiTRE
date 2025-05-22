@@ -1,0 +1,10 @@
+cat 1 attr
+dog 2 attr
+ferret 3 attr
+weasel 4 attr
+fox 5 attr
+parrot 6 attr
+armadillo 7 attr
+finch 8 attr
+wolf 9 attr
+rabbit 10 attr

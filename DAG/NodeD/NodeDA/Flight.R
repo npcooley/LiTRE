@@ -55,8 +55,11 @@ if (nrow(Syn[[2, 1]]) > 0) {
                         Verbose = TRUE)
   # these should be the default args and correct
   if (nrow(P01) > 0) {
+    # these should be the default args and correct
     P02 <- WithinSetCompetition(SynExtendObject = P01,
-                                AllowCrossContigConflicts = TRUE,
+                                AllowCrossContigConflicts = FALSE,
+                                CompeteBy = "Delta_Background",
+                                PollContext = FALSE,
                                 Verbose = TRUE)
   } else {
     P02 <- P01
@@ -69,8 +72,10 @@ if (nrow(Syn[[2, 1]]) > 0) {
                         Verbose = TRUE)
   if (nrow(P03) > 0) {
     P04 <- WithinSetCompetition(SynExtendObject = P03,
-                                AllowCrossContigConflicts = TRUE,
-                                Verbose = TRUE)
+                                AllowCrossContigConflicts = FALSE,
+                                CompeteBy = "Delta_Background",
+                                PollContext = FALSE,
+                                Verbose = FALSE)
   } else {
     P04 <- P03
   }
@@ -90,6 +95,8 @@ if (nrow(Syn[[2, 1]]) > 0) {
   r2 <- i1 %in% mat1
   r3 <- i2 %in% mat1
   r4 <- !(i2 %in% mat1)
+  # grab from both just in case and unique them at the end,
+  # this isn't the most efficient, but is robust to zero row results in either or both sets
   tab1 <- do.call(rbind,
                   list(data.frame("p1" = P02$p1[r1],
                                   "p2" = P02$p2[r1],
@@ -117,6 +124,7 @@ if (nrow(Syn[[2, 1]]) > 0) {
                                 digits = 5,
                                 format = "fg",
                                 width = 1))
+  tab1 <- unique(tab1)
   gz1 <- gzfile(paste0("Pairwise",
                        formatC(x = as.integer(OutID),
                                flag = 0,

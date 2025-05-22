@@ -139,7 +139,7 @@ for file in ${tmp04}_*; do
     # echo "here!"
     # get the unique values in the first column
     # u1=$(awk '{print $1}' | sort -u)
-    # but that's not necessary, i've already sorted it by the unique key
+    # but that's not necessary, i've already split by the unique key
     # i just need to read the first value of the first column
     u1=$(awk 'NR==1 { print $1 }' "$file")
     # offset for array access, the array is sorted and the integer is keyed to that sort
