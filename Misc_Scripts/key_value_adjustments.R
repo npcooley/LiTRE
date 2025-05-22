@@ -16,11 +16,11 @@ writeLines(prettify(toJSON(test_vals)),
            "DAG/testvals.json")
 
 prod_vals <- list("Manager.dag" = list("RETRY B" = 10,
-                                       "RETRY D" = 300),
+                                       "RETRY D" = 350),
                   "NodeB/PreCollectionBA.sh" = list("LIM" = 10000),
                   "CollectionRetry.sh" = list("LIM" = 10),
                   "NodeD/PreFlightDA.sh" = list("LIM" = 50000),
-                  "ManagerEnd.sh" = list("LIM" = 300))
+                  "ManagerEnd.sh" = list("LIM" = 350))
 
 writeLines(prettify(toJSON(prod_vals)),
            "DAG/prodvals.json")

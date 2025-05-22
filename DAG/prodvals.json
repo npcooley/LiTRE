@@ -4,7 +4,7 @@
             10
         ],
         "RETRY D": [
-            300
+            350
         ]
     },
     "NodeB/PreCollectionBA.sh": {
@@ -24,7 +24,7 @@
     },
     "ManagerEnd.sh": {
         "LIM": [
-            300
+            350
         ]
     }
 }
