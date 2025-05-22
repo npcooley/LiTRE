@@ -22,7 +22,7 @@ other_vals02=$(tail -n 1 "TrackerFiles/DStart.txt")
 other_vals02=$(echo $other_vals02 | cut -d " " -f1)
 other_vals03=$(wc -l < $File01)
 other_vals04=$(wc -l < $File02)
-LIM=300
+LIM=350
 DAG="Flight.dag"
 
 for file in NodeD/NodeDA/${DAG}*; do

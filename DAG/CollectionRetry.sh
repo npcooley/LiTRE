@@ -16,7 +16,7 @@ File02="v${other_vals01}_assemblies_expected.txt"
 # AssemplyPlanning.txt is a table of the expected VAR arguments for the dag
 File03="v${other_vals01}_assemblies_planned.txt"
 # FTP_Key for future pulls
-File04="FTP_Key"
+File04="FTP_Key.txt"
 
 # use redirection and wrap in parens so that the file name isn't printed
 Completed=$(wc -l < "${File01}")

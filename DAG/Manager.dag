@@ -37,7 +37,7 @@ PARENT C CHILD D
 # implying a total of ~ 9.6M pairwise comparisons requiring at least 192 iterations of 50K
 # build in extra iterations as a cushion
 RETRY B 10
-RETRY D 300
+RETRY D 350
 
 # when the DAG is triggered we have some housekeeping to do
 SCRIPT PRE A ManagerStart.sh
