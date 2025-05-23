@@ -78,7 +78,7 @@ else
     # step 3: remove lines from the planning file that represent assemblies that were missed after all attempts
     # awk -f <program> <absent> <planning> > <output>
     # we're only rewriting the FTP_Key here ... the planning files shouldn't need to be edited, at least for now?
-    awk -f ${tmp02} ${tmp04} > ${File04}
+    awk -f ${tmp02} ${tmp04} ${File03} > ${File04}
     # print an update to the logfile before exiting
     printf "  NodeB completed %d of %d assemblies on attempt %d [${dateval}]\n" ${Completed} ${Expected} ${other_vals02} >> SummaryFiles/log.txt
     tar czvf assemblylists.tar.xz v*_assemblies_completed.txt
