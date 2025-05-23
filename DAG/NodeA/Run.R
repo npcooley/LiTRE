@@ -35,11 +35,13 @@ FTPs <- system(command = EntrezQuery,
 
 # either set a limit for testing or just shuffle the ftp addresses
 # LIM <- 15L
-LIM <- length(FTPs)
+# LIM <- length(FTPs)
 
-FTPs <- FTPs[sample(x = length(FTPs),
-                    size = LIM,
-                    replace = TRUE)]
+# this is a relic of the testing and should have been caught a long time ago...
+# I'm no longer limiting this variable during testing, and i haven't been for a long time
+# FTPs <- FTPs[sample(x = length(FTPs),
+#                     size = LIM,
+#                     replace = FALSE)]
 
 # set file names after current version
 # assemblies completed
