@@ -92,7 +92,7 @@ connectGrob(M2, E)
 
 ## Planning
 
-The simplest step in the project (kind of). Use the NCBI [edirect](https://www.ncbi.nlm.nih.gov/books/NBK179288/) tools to go out and ask for (in this case) all of the complete refseq reference genomes. Edirect is *really* powerful, though not always [easy to leverage](https://ncbi-hackathons.github.io/EDirectCookbook/). The meat of this is the programmatic construction of our edirect query, the execution of that query, and the reconciliation of those returned results with any pre-existing query results from previous iterations of the DAG.
+The simplest step in the project (kind of). Use the NCBI [edirect](https://www.ncbi.nlm.nih.gov/books/NBK179288/) tools to go out and ask for (in this case) all of the complete refseq reference prokaryotic assemblies. Edirect is *really* powerful, though not always [easy to leverage](https://ncbi-hackathons.github.io/EDirectCookbook/). The meat of this is the programmatic construction of our edirect query, the execution of that query, and the reconciliation of results returned by our query with any pre-existing query results from previous iterations of the DAG.
 
 ```{r esearch example, eval = FALSE, echo = TRUE}
 # our current query
@@ -113,6 +113,7 @@ EntrezQuery <- paste0("esearch -db assembly ",
                      '| ',
                      'xtract -pattern DocumentSummary -element FtpPath_RefSeq')
 
+# the timeout argument is only necessary when running this command interactively
 FTPs <- system(command = EntrezQuery,
                intern = TRUE,
                timeout = 1000L)
@@ -168,7 +169,7 @@ Yet to be actualized, but following the collection of our candidate pairs, we'll
 
 ## Community detection
 
-The fantastic [Aidan Lakshman](https://github.com/ahl27) constructed [Exolabel](https://www.ahl27.com/posts/2025/04/exolabel-full/) to perform this step, and eventually it will be deployed here to collect our equivalent to what folks commonly call [COGs](https://www.ncbi.nlm.nih.gov/research/cog-project/).
+[Aidan Lakshman](https://github.com/ahl27) constructed [Exolabel](https://www.ahl27.com/posts/2025/04/exolabel-full/) to perform this step, and eventually it will be deployed here to collect our equivalent to what folks commonly call [COGs](https://www.ncbi.nlm.nih.gov/research/cog-project/).
 
 ## Planning (again, probably)
 
@@ -182,7 +183,7 @@ Another [Aidan Lakshman](https://github.com/ahl27) product, [Evoweaver](https://
 
 This is where the real fun will begin...
 
-Our group has our own hopes to use these functional associations to do things like annotation through association in places where there are connections between functionally described and functionally undescribed equivalog groups, but we also have the overarching goal of ensuring that the data products produced in this main pipeline will be available for use by others, and can serve as hypothesis generation tools for folks with varieties of interests.
+Our group has our own hopes to use these functional associations to do things like annotation through association in places where there are connections between functionally described and functionally undescribed equivalog groups, but we also have the overarching goal of ensuring that the data products from this project will be available for use by others, and can serve as hypothesis generation tools for folks with varieties of interests.
 
 # Why HTCondor and the Open Science Grid?
 
@@ -209,7 +210,7 @@ No.
 
 # An extremely minimal code example of what's going on
 
-This code mirrors some of our internal tests, and gives a fairly good representation of both how the code works, and one of the areas where this task is difficult. Two relatively distantly related assemblies from within the same genus can be compared for candidate equivalog pairs, though much further beyond that gets out of the scope of a readme document. Their relative divergence can be visualized both in the synteny map, and the histogram of candidate pairs.
+This code mirrors some of our internal tests, and gives a fairly good representation of both the workflow, and one of the areas where this task is difficult. Two relatively distantly related assemblies from within the same genus can be compared for candidate equivalog pairs, though much further beyond that gets out of the scope of a readme document. Their relative divergence can be visualized both in the synteny map, and the histogram of candidate pairs.
 
 ```{r minimal example}
 suppressMessages(library(SynExtend))
@@ -282,7 +283,10 @@ names(genecalls) <- seq(length(genecalls))
 
 syn <- FindSynteny(dbFile = conn01,
                    verbose = TRUE)
+# a printed summary of the shared information content between these two assemblies
 print(syn)
+
+# a dot plot visualizing the shared information content between these assemblies
 pairs(syn)
 
 l01 <- NucleotideOverlap(SyntenyObject = syn,

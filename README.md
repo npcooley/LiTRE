@@ -1,7 +1,7 @@
 Building a living tree of refseq equivalogs
 ================
 Nicholas Cooley
-2025-05-27
+2025-05-28
 
 - [What is this?](#what-is-this)
   - [Ok, so specifically?](#ok-so-specifically)
@@ -77,13 +77,13 @@ planning, D) comparison collection, E) future nodes…
 
 The simplest step in the project (kind of). Use the NCBI
 [edirect](https://www.ncbi.nlm.nih.gov/books/NBK179288/) tools to go out
-and ask for (in this case) all of the complete refseq reference genomes.
-Edirect is *really* powerful, though not always [easy to
-leverage](https://ncbi-hackathons.github.io/EDirectCookbook/). The meat
-of this is the programmatic construction of our edirect query, the
-execution of that query, and the reconciliation of those returned
-results with any pre-existing query results from previous iterations of
-the DAG.
+and ask for (in this case) all of the complete refseq reference
+prokaryotic assemblies. Edirect is *really* powerful, though not always
+[easy to leverage](https://ncbi-hackathons.github.io/EDirectCookbook/).
+The meat of this is the programmatic construction of our edirect query,
+the execution of that query, and the reconciliation of results returned
+by our query with any pre-existing query results from previous
+iterations of the DAG.
 
 ``` r
 # our current query
@@ -104,6 +104,7 @@ EntrezQuery <- paste0("esearch -db assembly ",
                      '| ',
                      'xtract -pattern DocumentSummary -element FtpPath_RefSeq')
 
+# the timeout argument is only necessary when running this command interactively
 FTPs <- system(command = EntrezQuery,
                intern = TRUE,
                timeout = 1000L)
@@ -177,7 +178,7 @@ community detection.
 
 ## Community detection
 
-The fantastic [Aidan Lakshman](https://github.com/ahl27) constructed
+[Aidan Lakshman](https://github.com/ahl27) constructed
 [Exolabel](https://www.ahl27.com/posts/2025/04/exolabel-full/) to
 perform this step, and eventually it will be deployed here to collect
 our equivalent to what folks commonly call
@@ -204,9 +205,9 @@ Our group has our own hopes to use these functional associations to do
 things like annotation through association in places where there are
 connections between functionally described and functionally undescribed
 equivalog groups, but we also have the overarching goal of ensuring that
-the data products produced in this main pipeline will be available for
-use by others, and can serve as hypothesis generation tools for folks
-with varieties of interests.
+the data products from this project will be available for use by others,
+and can serve as hypothesis generation tools for folks with varieties of
+interests.
 
 # Why HTCondor and the Open Science Grid?
 
@@ -269,8 +270,8 @@ No.
 # An extremely minimal code example of what’s going on
 
 This code mirrors some of our internal tests, and gives a fairly good
-representation of both how the code works, and one of the areas where
-this task is difficult. Two relatively distantly related assemblies from
+representation of both the workflow, and one of the areas where this
+task is difficult. Two relatively distantly related assemblies from
 within the same genus can be compared for candidate equivalog pairs,
 though much further beyond that gets out of the scope of a readme
 document. Their relative divergence can be visualized both in the
@@ -360,9 +361,10 @@ syn <- FindSynteny(dbFile = conn01,
 
     ## ================================================================================
     ## 
-    ## Time difference of 16.63 secs
+    ## Time difference of 16.93 secs
 
 ``` r
+# a printed summary of the shared information content between these two assemblies
 print(syn)
 ```
 
@@ -371,6 +373,7 @@ print(syn)
     ## 2 608 blocks    1 seq
 
 ``` r
+# a dot plot visualizing the shared information content between these assemblies
 pairs(syn)
 ```
 
@@ -387,7 +390,7 @@ l01 <- NucleotideOverlap(SyntenyObject = syn,
     ## ================================================================================
     ## Finding connected features.
     ## ================================================================================
-    ## Time difference of 0.1816089 secs
+    ## Time difference of 0.18067 secs
 
 ``` r
 PrepareSeqs(SynExtendObject = l01,
@@ -398,7 +401,7 @@ PrepareSeqs(SynExtendObject = l01,
     ## Preparing overhead data.
     ## ================================================================================
     ## Complete!
-    ## Time difference of 1.043867 secs
+    ## Time difference of 1.184702 secs
 
 ``` r
 p01 <- SummarizePairs(SynExtendObject = l01,
@@ -410,7 +413,7 @@ p01 <- SummarizePairs(SynExtendObject = l01,
 
     ## Collecting pairs.
     ## ================================================================================
-    ## Time difference of 1.120618 mins
+    ## Time difference of 1.111685 mins
 
 ``` r
 p02 <- WithinSetCompetition(SynExtendObject = p01,
@@ -422,7 +425,7 @@ p02 <- WithinSetCompetition(SynExtendObject = p01,
     ## initial pass complete!
     ## ================================================================================
     ## final pass completed!
-    ## Time difference of 0.3792439 secs
+    ## Time difference of 0.363636 secs
 
 ``` r
 par(mar = c(3, 3, 3, 1),
