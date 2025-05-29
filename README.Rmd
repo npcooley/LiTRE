@@ -172,7 +172,6 @@ The subdag triggers a *second* subdag, which itself has pre- and post- scripts. 
 
 ```{bash, eval = TRUE, echo = TRUE}
 # the $DAG variable here is just referencing Flight.dag, though some heavy lifting occurs both before and after these lines
-pwd
 sed -n 148,159p ./DAG/NodeD/PreFlightDA.sh
 ```
 
